@@ -1,0 +1,6 @@
+mutation($email: String!, $password: String!) {
+  token(email: $email , password: $password)  {
+    me_access_token
+    custom_access_token
+  }
+}

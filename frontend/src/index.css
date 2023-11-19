@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.grecaptcha-badge {
+  opacity: 0;
+}
+
+.modal,
+.overlay {
+  @apply fixed top-0 left-0 w-full h-full;
+}
+
+.overlay {
+  @apply bg-gray-600 opacity-70 z-40 cursor-pointer;
+}
+
+.modal {
+  @apply z-50 flex justify-center items-center;
+}
+
+.outlineReactiveIcon {
+  @apply dark:text-secondary-11 hover:text-primary dark:hover:text-primary transform hover:scale-110 hover:cursor-pointer;
+}
+
+.reactiveButton {
+  @apply text-white bg-primary hover:bg-primary-2 hover:text-secondary transition duration-500 ease-in-out px-4 md:px-7 py-2 rounded-md focus:outline-none focus:ring-0 font-medium text-sm md:text-base leading-6;
+}
+
+.reactiveIcon {
+  @apply transform hover:scale-125 duration-150 hover:cursor-pointer;
+}
+
+.about-info-title {
+  @apply mr-2 text-secondary dark:text-secondary-8 font-medium;
+}
+
+.about-info-value {
+  @apply text-secondary-6 dark:text-primary-dark-2 ml-1;
+}
+
+.box-shadow {
+  @apply rounded-xl shadow-xl my-4 px-9 py-6 border-[1px] border-secondary-4/20;
+}
+
+.box-icon {
+  @apply w-5 2xl:w-5 mr-2 text-primary-3;
+}
+
+.box-title {
+  @apply text-primary-3 font-bold text-base;
+}
+
+.section-title {
+  @apply font-black text-5xl text-secondary leading-[3.7rem] text-center dark:text-secondary-8;
+}
+
+.section-subtitle {
+  @apply font-medium text-lg text-secondary-2 text-center dark:text-primary-5;
+}
+
+.primary-button {
+  @apply border items-center border-transparent font-medium rounded-md bg-primary text-white dark:text-primary-dark-2;
+}
+
+.outline-button {
+  @apply border border-primary-2 rounded-md dark:text-primary-dark-2;
+}
+
+.formLabel {
+  @apply text-lg font-medium leading-[35px] text-hahu-gray dark:text-primary-dark-2;
+}
