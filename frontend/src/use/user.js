@@ -9,6 +9,7 @@ export default function() {
         isLoggedIn: computed(() => !!state.value.access_token),
         token: () => state.value.access_token,
         email: state.value && state.value.email,
+        address: state.value && state.value.address,
         name: (state.value && state.value.name),
         id: state.value.sub,
         unset: () => {
