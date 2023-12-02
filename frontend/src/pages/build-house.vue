@@ -1,9 +1,336 @@
+<script>
+import draggable from "vuedraggable";
+import { GridLayout, GridItem } from "vue3-grid-layout-next";
+import { XCircleIcon, PencilSquareIcon, XMarkIcon } from "@heroicons/vue/24/solid";
+import { ChevronDownIcon } from "@heroicons/vue/24/outline";
+// import useEmitter from "@/use/emitter";
+
+import modal from "@/components/h/modal.vue";
+// import HListNew from "@/components/h/h-text-field.vue"
+// import HListNew from "@/components/h/h-list-new.vue";
+import HListNew from "@/components/h/h-list-new.vue";
+import useUser from "@/use/user";
+let idGlobal = 0;
+export default {
+  name: "custom-clone",
+  display: "Custom Clone",
+  order: 3,
+  components: {
+    draggable,
+    GridLayout,
+    GridItem,
+    XCircleIcon,
+    PencilSquareIcon,
+    modal,
+    XMarkIcon,
+    HListNew,
+  },
+  data() {
+    return {
+      list1: [
+        { icon: "/room.png", name: "Room", id: 1 },
+        { icon: "/garden.png", name: "Garden", id: 2 },
+        { icon: "/livingroom.png", name: "Living", id: 3 },
+        { icon: "/kitchen.png", name: "Kitchen", id: 4 },
+        { icon: "/bathroom.png", name: "Bath", id: 5 },
+        { icon: "/garage.png", name: "Garage", id: 6 },
+      ],
+      list2: [],
+      draggable: true,
+      resizable: true,
+      index: 0,
+      openModal: false,
+      clickTimer: null,
+      searchTxt: "",
+      helper: {},
+      ChevronDownIcon,
+      address: {},
+      currentComponent: {},
+    };
+  },
+  computed: {
+    materialList() {
+      let lists = [
+        { id: "wood", name: "Wood" },
+        { id: "steel", name: "Steel" },
+        { id: "aluminum", name: "Aluminum" },
+        { id: "glass", name: "Glass" },
+      ];
+      return this.searchTxt
+        ? lists.filter((itm) => {
+            return itm.name.toLowerCase().includes(this.searchTxt.toLowerCase());
+          })
+        : lists;
+    },
+  },
+  mounted() {
+    const user = useUser();
+    this.address = user.address;
+    console.log("address", this.address);
+  },
+  methods: {
+    async fetchData() {
+      await this.axios
+        .get("http://localhost:8080/fetch-sensors-data")
+        .then((res) => {
+          console.log("res", res);
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    },
+    selectableVsearch(f) {
+      this.searchTxt = f;
+    },
+    itemTitle(item) {
+      let result = item.name;
+      if (item.static) {
+        result += " - Static";
+      }
+      return result;
+    },
+    log: function (evt) {
+      window.console.log(evt);
+    },
+    cloneComponent(itm) {
+      console.log("list2", this.list2);
+      let idd = idGlobal++;
+      return {
+        id: idd,
+        i: idd,
+        x: 0,
+        y: 0,
+        w: 2,
+        h: 2,
+        icon: itm.icon,
+        name: `${itm.name}-${idd}`,
+      };
+    },
+    removeComponent(itm) {
+      this.list2 = this.list2.filter((item) => item.id !== itm.id);
+    },
+    handleClick(item) {
+      this.currentComponent = item;
+      if (this.clickTimer) {
+        clearTimeout(this.clickTimer);
+        this.clickTimer = null;
+        this.onDoubleClick();
+        return;
+      }
+      this.clickTimer = setTimeout(() => {
+        this.clickTimer = null;
+      }, 250);
+    },
+    onDoubleClick() {
+      this.openModal = true;
+    },
+    closeModal() {
+      this.openModal = false;
+      this.list2 = this.list2.map((item,idx) => {
+        if (item.id === this.currentComponent.id) {
+
+          item.doors = [
+                {
+                    material: this.helper.door_id,
+                    doorSensor: {
+                        isDoorOpen: false,
+                        sensorId: item.id,
+                    }
+                }
+            ]
+            item.windows = [
+                {
+                    windowSensor: {
+                        sensorId: item.id,
+                    }
+                }
+            ]
+        }
+        return item;
+      });
+
+      this.helper = {};
+      console.log("list2", this.list2);
+    },
+    finish(){
+      let data = {
+        rooms:[],
+        kitchens:[],
+        bathrooms:[],
+        garages:[],
+        livingRooms:[],
+        gardens:[],
+        address: this.address,
+      }
+
+      this.list2.forEach(itm => {
+        if(itm.name.includes("Room")){
+          data.rooms.push({
+            roomID: itm.id,
+            gasSensor: {
+                sensorId: itm.id
+            },
+            humiditySensor: {
+                sensorId: itm.id
+            },
+            lightSensor: {
+                sensorId: itm.id
+            },
+            temperatureSensor: {
+                sensorId: itm.id
+            },
+            ventilationSensor: {
+                sensorId: itm.id
+            },
+            waterLeakSensor: {
+                sensorId: itm.id
+            },
+            windows: itm.windows,
+            doors: itm.doors
+          });
+        }else if(itm.name.includes("Kitchen")){
+          data.kitchens.push({
+            kitchenID: itm.id,
+            gasSensor: {
+                sensorId: itm.id
+            },
+            humiditySensor: {
+                sensorId: itm.id
+            },
+            lightSensor: {
+                sensorId: itm.id
+            },
+            temperatureSensor: {
+                sensorId: itm.id
+            },
+            ventilationSensor: {
+                sensorId: itm.id
+            },
+            waterLeakSensor: {
+                sensorId: itm.id
+            },
+            windows: itm.windows,
+            doors: itm.doors
+          });
+
+        }else if(itm.name.includes("Bath")){
+          data.bathrooms.push({
+            bathroomID: itm.id,
+            gasSensor: {
+                sensorId: itm.id
+            },
+            humiditySensor: {
+                sensorId: itm.id
+            },
+            lightSensor: {
+                sensorId: itm.id
+            },
+            temperatureSensor: {
+                sensorId: itm.id
+            },
+            ventilationSensor: {
+                sensorId: itm.id
+            },
+            waterLeakSensor: {
+                sensorId: itm.id
+            },
+            windows: itm.windows,
+            doors: itm.doors
+          });
+        } else if(itm.name.includes("Garage")){
+          data.garages.push({
+            garageID: itm.id,
+            gasSensor: {
+                sensorId: itm.id
+            },
+            humiditySensor: {
+                sensorId: itm.id
+            },
+            lightSensor: {
+                sensorId: itm.id
+            },
+            temperatureSensor: {
+                sensorId: itm.id
+            },
+            ventilationSensor: {
+                sensorId: itm.id
+            },
+            waterLeakSensor: {
+                sensorId: itm.id
+            },
+            windows: itm.windows,
+            doors: itm.doors
+          });
+        } else if(itm.name.includes("Living")){
+          data.livingRooms.push({
+            livingRoomID: itm.id,
+            gasSensor: {
+                sensorId: itm.id
+            },
+            humiditySensor: {
+                sensorId: itm.id
+            },
+            lightSensor: {
+                sensorId: itm.id
+            },
+            temperatureSensor: {
+                sensorId: itm.id
+            },
+            ventilationSensor: {
+                sensorId: itm.id
+            },
+            waterLeakSensor: {
+                sensorId: itm.id
+            },
+            windows: itm.windows,
+            doors: itm.doors
+          });
+        } else if(itm.name.includes("Garden")){
+          data.gardens.push({
+            gardenID: itm.id,
+            gasSensor: {
+                sensorId: itm.id
+            },
+            humiditySensor: {
+                sensorId: itm.id
+            },
+            lightSensor: {
+                sensorId: itm.id
+            },
+            temperatureSensor: {
+                sensorId: itm.id
+            },
+            ventilationSensor: {
+                sensorId: itm.id
+            },
+            waterLeakSensor: {
+                sensorId: itm.id
+            },
+            windows: itm.windows,
+            doors: itm.doors
+          });
+        }
+      })
+      console.log("data", data);
+      this.axios
+        .post("http://localhost:8080/create-house", data)
+        .then((res) => {
+          console.log("res", res);
+          this.$router.push("/house-info");
+        })
+        .catch((err) => {
+          console.log("err", err);
+        });
+    }
+  },
+};
+</script>
 <template>
   <modal v-model="openModal" class="mx-auto font-body h-screen w-1/4">
     <div class="py-6 px-12 bg-pp-blue border">
       <div class="flex justify-between items-center my-3">
         <div class="font-bold text-xl p-1 text-white">Room Details</div>
-        <div class="hover:cursor-pointer pr-5" @click="openModal = false">
+        <div class="hover:cursor-pointer pr-5" @click="closeModal">
           <div class="bg-gray-300 rounded-md h-8 w-8 hover:bg-opacity-30">
             <XMarkIcon class="w-8 h-8 p-2" />
           </div>
@@ -13,39 +340,45 @@
       <div class="mb-20">
         <div class="text-white text-md mb-3">Doors</div>
         <HListNew
-        name="Door"
-        v-model="helper.SDoor"
-        v-model:selected="helper.door_id"
-        :items="materialList"
-        @search="selectableVsearch"
-        :trailingIcon="ChevronDownIcon"
-        hideDetail
-      >
-        <template v-slot:label>
-          <p class="text-gray-400 text-sm">Material<span class="red-color">*</span></p>
-        </template>
-      </HListNew>
-      <div class="text-white text-md mb-3 mt-6">Windows</div>
+          name="Door"
+          v-model="helper.SDoor"
+          v-model:selected="helper.door_id"
+          :items="materialList"
+          @search="selectableVsearch"
+          :trailingIcon="ChevronDownIcon"
+          hideDetail
+        >
+          <template v-slot:label>
+            <p class="text-gray-400 text-sm">Material<span class="red-color">*</span></p>
+          </template>
+        </HListNew>
+        <div class="text-white text-md mb-3 mt-6">Windows</div>
         <HListNew
-        name="Door"
-        v-model="helper.sWindow"
-        v-model:selected="helper.window_id"
-        :items="materialList"
-        @search="selectableVsearch"
-        :trailingIcon="ChevronDownIcon"
-        hideDetail
-      >
-        <template v-slot:label>
-          <p class="text-gray-400 text-sm">Material<span class="red-color">*</span></p>
-        </template>
-      </HListNew>
+          name="Window"
+          v-model="helper.sWindow"
+          v-model:selected="helper.window_id"
+          :items="materialList"
+          @search="selectableVsearch"
+          :trailingIcon="ChevronDownIcon"
+          hideDetail
+        >
+          <template v-slot:label>
+            <p class="text-gray-400 text-sm">Material<span class="red-color">*</span></p>
+          </template>
+        </HListNew>
       </div>
     </div>
   </modal>
 
+  <div class="mx-4 flex justify-end">
+    <div>
+      <button @click="finish" class="rounded-md bg-slate-400 hover:bg-slate-300 text-pp-blue px-3 py-2">finish & Visualize</button>
+    </div>
+  </div>
   <div class="grid grid-cols-12 gap-4 p-4">
     <div class="col-span-9 h-full">
       <h3 class="text-lg font-bold">Design Your Home</h3>
+      <!-- <button @click="fetchData" class=" p-3 text-white border border-white">click me</button> -->
       <div class="border border-dashed h-full">
         <grid-layout
           :layout.sync="list2"
@@ -64,7 +397,7 @@
             :w="item.w"
             :h="item.h"
             :i="item.i"
-            @click="handleClick"
+            @click="handleClick(item)"
           >
             <div class="group">
               <div class="flex justify-end p-2">
@@ -135,114 +468,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import draggable from "vuedraggable";
-import { GridLayout, GridItem } from "vue3-grid-layout-next";
-import { XCircleIcon, PencilSquareIcon, XMarkIcon } from "@heroicons/vue/24/solid";
-import { ChevronDownIcon } from "@heroicons/vue/24/outline";
-
-import modal from "@/components/h/modal.vue";
-// import HListNew from "@/components/h/h-text-field.vue"
-// import HListNew from "@/components/h/h-list-new.vue";
-import HListNew from "@/components/h/h-list-new.vue";
-let idGlobal = 0;
-export default {
-  name: "custom-clone",
-  display: "Custom Clone",
-  order: 3,
-  components: {
-    draggable,
-    GridLayout,
-    GridItem,
-    XCircleIcon,
-    PencilSquareIcon,
-    modal,
-    XMarkIcon,
-    HListNew,
-  },
-  data() {
-    return {
-      list1: [
-        { icon: "/room.png", name: "Room", id: 1 },
-        { icon: "/garden.png", name: "Garden", id: 2 },
-        { icon: "/livingroom.png", name: "Living Room", id: 3 },
-        { icon: "/kitchen.png", name: "Kitchen", id: 4 },
-        { icon: "/bathroom.png", name: "Bath Room", id: 5 },
-        { icon: "/garage.png", name: "Garage", id: 6 },
-      ],
-      list2: [],
-      draggable: true,
-      resizable: true,
-      index: 0,
-      openModal: false,
-      clickTimer: null,
-      searchTxt: "",
-      helper: {},
-      ChevronDownIcon
-    };
-  },
-  computed: {
-    materialList(){
-      let lists = [
-            { id: 'wood', name: 'Wood' },
-            { id: 'steel', name: 'Steel' },
-            { id: 'aluminum', name: 'Aluminum' },
-            { id: 'glass', name: 'Glass' },
-          ];
-      return this.searchTxt ? lists.filter(itm => {
-        return itm.name.toLowerCase().includes(this.searchTxt.toLowerCase());
-      }) : lists;
-    },
-},
-  methods: {
-    selectableVsearch(f) {
-      this.searchTxt = f;
-    },
-    itemTitle(item) {
-      let result = item.name;
-      if (item.static) {
-        result += " - Static";
-      }
-      return result;
-    },
-    log: function (evt) {
-      window.console.log(evt);
-    },
-    cloneComponent(itm) {
-      console.log("list2", this.list2);
-      let idd = idGlobal++;
-      return {
-        id: idd,
-        i: idd,
-        x: 0,
-        y: 0,
-        w: 2,
-        h: 2,
-        icon: itm.icon,
-        name: `${itm.name}-${idd}`,
-      };
-    },
-    removeComponent(itm) {
-      this.list2 = this.list2.filter((item) => item.id !== itm.id);
-    },
-    handleClick() {
-      if (this.clickTimer) {
-        clearTimeout(this.clickTimer);
-        this.clickTimer = null;
-        this.onDoubleClick();
-        return;
-      }
-      this.clickTimer = setTimeout(() => {
-        this.clickTimer = null;
-      }, 250);
-    },
-    onDoubleClick() {
-      this.openModal = true;
-    },
-  },
-};
-</script>
 <style scoped>
 .vue-grid-layout {
   background: #07211d;
