@@ -1,7 +1,6 @@
 package com.elte.synchome.dto;
 
-import com.elte.synchome.house.*;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.elte.synchome.entity.house.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,7 +10,6 @@ import java.util.List;
 
 @Getter @Setter
 @ToString
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class HouseCreationRequest {
     private List<Room> rooms = new ArrayList<>();
     private List<Kitchen> kitchens = new ArrayList<>();

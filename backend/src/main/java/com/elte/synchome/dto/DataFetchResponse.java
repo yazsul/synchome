@@ -1,6 +1,6 @@
 package com.elte.synchome.dto;
 
-import com.elte.synchome.house.*;
+import com.elte.synchome.entity.house.House;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

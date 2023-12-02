@@ -1,48 +1,40 @@
 package com.elte.synchome.service;
 
-import com.elte.synchome.dto.HouseCreationRequest;
-import com.elte.synchome.house.House;
-import com.elte.synchome.house.HouseBuilder;
+import com.elte.synchome.entity.house.House;
+import com.elte.synchome.repository.HouseRepository;
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @Service
 public class HouseService {
-    private static final Logger logger = LoggerFactory.getLogger(HouseService.class);
-    private List<House> houses = new ArrayList<>();
+    private final HouseRepository houseRepository;
 
-    public House createHouse(HouseCreationRequest houseCreationRequest) {
-        logger.info("createHouse is called and the following parameter is passed: " + houseCreationRequest);
-
-        var rooms = houseCreationRequest.getRooms();
-        var kitchens = houseCreationRequest.getKitchens();
-        var bathrooms = houseCreationRequest.getBathrooms();
-        var garages = houseCreationRequest.getGarages();
-        var livingRooms = houseCreationRequest.getLivingRooms();
-        var gardens = houseCreationRequest.getGardens();
-        var doors = houseCreationRequest.getDoors();
-        var address = houseCreationRequest.getAddress();
-
-        House house = new HouseBuilder()
-                .addManyRooms(rooms)
-                .addManyKitchens(kitchens)
-                .addManyBathrooms(bathrooms)
-                .addManyGarages(garages)
-                .addManyLivingRooms(livingRooms)
-                .addManyGardens(gardens)
-                .addManyDoors(doors)
-                .setAddress(address)
-                .build();
-
-        houses.add(house);
-        return house;
+    public HouseService(HouseRepository houseRepository) {
+        this.houseRepository = houseRepository;
     }
+
+    public void saveHouse(final House house) {
+        this.houseRepository.save(house);
+    }
+    public void removeHouseById(final String id) {
+        this.houseRepository.deleteById(id);
+    }
+
+    public void removeAllHouses() {
+        this.houseRepository.deleteAll();
+    }
+
+    public House getHouseById(final String id) {
+        return this.houseRepository.findById(id).orElse(null);
+    }
+
+    public List<House> getAllHouses() {
+        return this.houseRepository.findAll();
+    }
+
 }
