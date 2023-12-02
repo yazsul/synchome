@@ -5,19 +5,22 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.UUID;
+
 @Getter @Setter
 @ToString
 public class DoorSensor implements Sensor {
 
-    private String sensorId;
+    public DoorSensor(){
+        this.id = UUID.randomUUID().toString();
+    }
+    private String id;
     private boolean isDoorOpen;
 
   @Override
   public void readData() {
     DoorSensorGenerator generator = new DoorSensorGenerator();
     this.isDoorOpen = generator.generateRandomReadings();
-    System.out.println("Door Sensor Data - Sensor ID: " + sensorId + ", Is Door Open: " + isDoorOpen);
+    System.out.println("Door Sensor Data - Sensor ID: " + id + ", Is Door Open: " + isDoorOpen);
    }
-
-  // Implement door sensor-specific methods and properties
 }

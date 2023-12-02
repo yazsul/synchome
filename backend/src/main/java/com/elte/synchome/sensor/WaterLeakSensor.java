@@ -5,18 +5,24 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @ToString
 public class WaterLeakSensor implements Sensor {
-    private String sensorId;
+
+    public WaterLeakSensor(){
+        this.id = UUID.randomUUID().toString();
+    }
+
+    private String id;
     private boolean isLeakingWater;
 
     @Override
     public void readData() {
         WaterLeakSensorGenerator generator = new WaterLeakSensorGenerator();
         this.isLeakingWater = generator.generateRandomReadings();
-        System.out.println("Water Leak Sensor Data - Sensor ID: " + sensorId + ", Is Water Leaking: " + isLeakingWater);
+        System.out.println("Water Leak Sensor Data - Sensor ID: " + id + ", Is Water Leaking: " + isLeakingWater);
     }
-    // Implement water leak sensor-specific methods and properties
 }
