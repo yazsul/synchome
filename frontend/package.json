@@ -51,7 +51,9 @@
     "unplugin-vue-components": "^0.22.12",
     "vite": "^4.0.2",
     "vite-plugin-pages": "^0.28.0",
-    "vite-plugin-vue-layouts": "^0.7.0"
+    "vite-plugin-vue-layouts": "^0.7.0",
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0"
   },
   "packageManager": "yarn@3.2.2"
 }
