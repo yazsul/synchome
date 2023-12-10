@@ -1,7 +1,7 @@
 package com.elte.synchome.service;
 
 import com.elte.synchome.dto.DataFetchResponse;
-import com.elte.synchome.house.House;
+import com.elte.synchome.entity.house.House;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -16,7 +16,15 @@ import java.util.List;
 public class DataFetchService {
     private static final Logger logger = LoggerFactory.getLogger(DataFetchService.class);
 
-    public DataFetchResponse fetchData(final List<House> houses) {
+    private final HouseService houseService;
+
+    public DataFetchService(HouseService houseService) {
+        this.houseService = houseService;
+    }
+
+    public DataFetchResponse fetchData() {
+        final List<House> houses = this.houseService.getAllHouses();
+
         logger.info("fetchData is called and the following parameter is passed: " + houses);
         if (houses == null) {
             logger.error("Null value is passed therefore an empty response is returned");
