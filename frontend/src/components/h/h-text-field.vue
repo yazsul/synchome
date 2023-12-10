@@ -135,7 +135,7 @@ watch(
         :name="props.name"
         step="any"
         :id="id"
-        class="block w-full text-secondary dark:bg-hahu-gray dark:text-white focus:outline-none text-sm md:text-base rounded-md font-body"
+        class="block w-full text-secondary dark:bg-gray-100 dark:text-gray-800 focus:outline-none text-sm md:text-base rounded-md font-body"
         :class="[
           errorMessage
             ? 'focus:ring-red-500 focus:border-red-500 hover:border-red-500 border-red-500'
@@ -145,7 +145,7 @@ watch(
           props.class ? props.class : '',
           props.placeholderStyle
             ? props.placeholderStyle
-            : ' placeholder-gray-500',
+            : ' placeholder-gray-100',
           disabled ? ' bg-gray-100 cursor-not-allowed' : '',
         ]"
         :placeholder="props.placeholder"
