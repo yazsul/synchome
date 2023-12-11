@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.elte.synchome.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,6 +19,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class House {
     @Id
     private String id;
+    private List<String> usersIds = new ArrayList<>();
     private List<HouseComponent> rooms;
     private List<HouseComponent> kitchens;
     private List<HouseComponent> bathrooms;
@@ -41,15 +43,24 @@ public class House {
         this.address = houseBuilder.getAddress();
     }
 
-    public void readSensorsData() {
+    public void readGeneratedSensorsData() {
         new ArrayList<>(Arrays.asList(
                 rooms, kitchens, bathrooms,
                 garages, livingRooms, gardens,
                 doors))
                 .forEach(houseComponents -> {
-                    houseComponents.forEach(houseComponent -> {
-                        houseComponent.readSensorsData();
-                    });
+                    houseComponents.forEach(HouseComponent::readGeneratedSensorsData);
                 });
     }
+
+    public void readStoredSensorsData() {
+        new ArrayList<>(Arrays.asList(
+                rooms, kitchens, bathrooms,
+                garages, livingRooms, gardens,
+                doors))
+                .forEach(houseComponents -> {
+                    houseComponents.forEach(HouseComponent::readStoredSensorsData);
+                });
+    }
+
 }

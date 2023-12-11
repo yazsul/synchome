@@ -19,7 +19,12 @@ public class Door implements HouseComponent {
     private DoorSensor doorSensor;
 
     @Override
-    public void readSensorsData() {
-        doorSensor.readData();
+    public void readGeneratedSensorsData() {
+        doorSensor.readGeneratedData();
+    }
+
+    @Override
+    public void readStoredSensorsData() {
+        doorSensor.readStoredData();
     }
 }

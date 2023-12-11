@@ -18,11 +18,14 @@ public class HouseService {
         this.houseRepository = houseRepository;
     }
 
-    public void saveHouse(final House house) {
-        this.houseRepository.save(house);
+    public House saveHouse(final House house) {
+        return this.houseRepository.save(house);
     }
     public void removeHouseById(final String id) {
         this.houseRepository.deleteById(id);
+    }
+    public void removeHouse(final House house) {
+        this.houseRepository.delete(house);
     }
 
     public void removeAllHouses() {

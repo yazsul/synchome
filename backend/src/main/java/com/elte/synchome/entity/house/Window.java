@@ -20,7 +20,12 @@ public class Window implements HouseComponent {
   private WindowSensor windowSensor;
 
   @Override
-  public void readSensorsData() {
-  windowSensor.readData();
+  public void readGeneratedSensorsData() {
+  windowSensor.readGeneratedData();
+  }
+
+  @Override
+  public void readStoredSensorsData() {
+    windowSensor.readStoredData();
   }
 }
