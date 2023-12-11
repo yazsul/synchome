@@ -9,7 +9,8 @@ public class GasSensorGenerator {
     private static final double MIN_READING = 0.0;
     private static final double MAX_READING = 100.0;
     private static final int NUM_OF_READINGS = 1;
-    private Random random = new Random();
+    private final Random random = new Random();
+
     public List<Double> generateRandomReadings() {
         return random.doubles(NUM_OF_READINGS, MIN_READING, MAX_READING)
                 .boxed()

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +16,7 @@ import java.util.UUID;
 @Setter
 @ToString
 public class VentilationSensor implements Sensor {
+    private static final Logger logger = LoggerFactory.getLogger(VentilationSensor.class);
 
     public VentilationSensor(){
         this.id = UUID.randomUUID().toString();
@@ -23,10 +26,15 @@ public class VentilationSensor implements Sensor {
     private List<Double> values;
 
     @Override
-    public void readData() {
+    public void readGeneratedData() {
         VentilationSensorGenerator generator = new VentilationSensorGenerator();
         this.values = generator.generateRandomReadings();
-        System.out.println("Ventilation Sensor Data - Sensor ID: " + id + ", Values: " + values);
+        logger.info("Ventilation Sensor Data - Sensor ID: " + id + ", Values: " + values);
+    }
+
+    @Override
+    public void readStoredData() {
+
     }
 }
  

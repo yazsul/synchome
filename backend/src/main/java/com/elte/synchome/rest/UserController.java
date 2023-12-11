@@ -2,7 +2,10 @@ package com.elte.synchome.rest;
 
 import com.elte.synchome.dto.LoginRequest;
 import com.elte.synchome.entity.User;
+import com.elte.synchome.service.HouseCreationService;
 import com.elte.synchome.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
 
@@ -60,9 +64,9 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
-        String passwordHash = loginRequest.getPasswordHash();
+        String password = loginRequest.getPassword();
 
-        return userService.authenticateUser(username, passwordHash);
+        return userService.authenticateUser(username, password);
     }
 
 }

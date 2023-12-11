@@ -17,5 +17,4 @@ public class Address {
   @NonNull private String country;
   @NonNull private int postcode;
 
-  // add constraints to those values
 }

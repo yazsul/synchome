@@ -24,11 +24,20 @@ public class Garden implements HouseComponent{
   private List<Door> doors;
 
   @Override
-  public void readSensorsData() {
-    gasSensor.readData();
-    humiditySensor.readData();
-    lightSensor.readData();
-    temperatureSensor.readData();
-    doors.forEach(door -> door.readSensorsData());
+  public void readGeneratedSensorsData() {
+    gasSensor.readGeneratedData();
+    humiditySensor.readGeneratedData();
+    lightSensor.readGeneratedData();
+    temperatureSensor.readGeneratedData();
+    doors.forEach(Door::readGeneratedSensorsData);
+  }
+
+  @Override
+  public void readStoredSensorsData() {
+    gasSensor.readStoredData();
+    humiditySensor.readStoredData();
+    lightSensor.readStoredData();
+    temperatureSensor.readStoredData();
+    doors.forEach(Door::readStoredSensorsData);
   }
 }

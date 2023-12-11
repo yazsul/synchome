@@ -27,14 +27,27 @@ public class LivingRoom implements HouseComponent{
   private List<Door> doors;
 
   @Override
-  public void readSensorsData() {
-    gasSensor.readData();
-    humiditySensor.readData();
-    lightSensor.readData();
-    temperatureSensor.readData();
-    ventilationSensor.readData();
-    waterLeakSensor.readData();
-    windows.forEach(window -> window.readSensorsData());
-    doors.forEach(door -> door.readSensorsData());
+  public void readGeneratedSensorsData() {
+    gasSensor.readGeneratedData();
+    humiditySensor.readGeneratedData();
+    lightSensor.readGeneratedData();
+    temperatureSensor.readGeneratedData();
+    ventilationSensor.readGeneratedData();
+    waterLeakSensor.readGeneratedData();
+    windows.forEach(Window::readGeneratedSensorsData);
+    doors.forEach(Door::readGeneratedSensorsData);
+  }
+
+  @Override
+  public void readStoredSensorsData() {
+    gasSensor.readStoredData();
+    humiditySensor.readStoredData();
+    lightSensor.readStoredData();
+    temperatureSensor.readStoredData();
+    ventilationSensor.readStoredData();
+    waterLeakSensor.readStoredData();
+    windows.forEach(Window::readStoredSensorsData);
+    doors.forEach(Door::readStoredSensorsData);
+
   }
 }

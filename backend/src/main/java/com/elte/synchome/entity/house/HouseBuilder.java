@@ -2,7 +2,6 @@ package com.elte.synchome.entity.house;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import lombok.Getter;
 import org.slf4j.Logger;
@@ -12,13 +11,13 @@ import org.slf4j.LoggerFactory;
 public class HouseBuilder {
     private static final Logger logger = LoggerFactory.getLogger(HouseBuilder.class);
 
-    private List<HouseComponent> rooms = new ArrayList<>();
-    private List<HouseComponent> kitchens = new ArrayList<>();
-    private List<HouseComponent> bathrooms = new ArrayList<>();
-    private List<HouseComponent> garages = new ArrayList<>();
-    private List<HouseComponent> livingRooms = new ArrayList<>();
-    private List<HouseComponent> gardens = new ArrayList<>();
-    private List<HouseComponent> doors = new ArrayList<>();
+    private final List<HouseComponent> rooms = new ArrayList<>();
+    private final List<HouseComponent> kitchens = new ArrayList<>();
+    private final List<HouseComponent> bathrooms = new ArrayList<>();
+    private final List<HouseComponent> garages = new ArrayList<>();
+    private final List<HouseComponent> livingRooms = new ArrayList<>();
+    private final List<HouseComponent> gardens = new ArrayList<>();
+    private final List<HouseComponent> doors = new ArrayList<>();
     private Address address;
 
     public HouseBuilder addRoom(final Room room) {
