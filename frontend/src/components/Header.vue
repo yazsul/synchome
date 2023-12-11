@@ -39,8 +39,8 @@ const navigation = ref([
       <div class="px-4 sm:px-6 lg:px-8 2xl:px-16">
         <div class="flex justify-between h-20">
           <div @click="router.push('/')" class="flex items-center gap-2 cursor-pointer">
-            <HomeIcon class="h-10 w-10"></HomeIcon>
-            <span class="font-extrabold text-4xl">SyncHome</span> 
+            <HomeIcon class="h-10 w-10 text-slate-300"></HomeIcon>
+            <span class="font-extrabold text-4xl text-slate-300">SyncHome</span> 
           </div>
           
           <div class="hidden sm:ml-6 md:flex sm:items-center sm:space-x-8">

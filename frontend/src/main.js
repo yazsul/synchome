@@ -2,32 +2,38 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router/index.js";
 import { ApolloClients } from "@vue/apollo-composable";
-// import { SetupCalendar } from 'v-calendar';
-import {createPinia} from 'pinia'
-// import { VueReCaptcha } from "vue-recaptcha-v3";
-import { apolloClient } from "./plugins/apollo"
+import { createPinia } from 'pinia';
+import { apolloClient } from "./plugins/apollo";
 import modal from "@/plugins/modal";
-import mitt from "@/plugins/mitt";
-
 import VueDOMPurifyHTML from "vue-dompurify-html";
 import i18n from "@/plugins/i18n";
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+import mitt from 'mitt'; // Import mitt
+
 import "./index.css";
 import "@/helpers/rules";
-// import 'v-calendar/dist/style.css';
 
+// Create pinia instance
 const pinia = createPinia();
 
+// Create mitt emitter instance
+const emitter = mitt();
 
+// Create Vue app instance
 const app = createApp(App)
   .use(router)
   .use(pinia)
-  .use(mitt)
   .provide(ApolloClients, {
     default: apolloClient
   })
-  // .use(SetupCalendar, {})
-  // .use(VueReCaptcha, { siteKey: import.meta.env.VITE_RECAPATCHA_SITE_KEY })
   .use(modal)
   .use(VueDOMPurifyHTML)
   .use(i18n)
-  .mount("#app");
+  .use(VueAxios, axios);
+
+// Assign the mitt emitter to the global properties
+app.config.globalProperties.$emitter = emitter;
+
+// Mount the Vue application
+app.mount("#app");
